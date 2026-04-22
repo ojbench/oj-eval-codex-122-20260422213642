@@ -86,6 +86,12 @@ class Memo {
   struct Cmp {
     bool operator()(const Node &a, const Node &b) const {
       if (a.time != b.time) return a.time > b.time; // min-heap by time
+      // Prefer pre-reminder (n==0 for NotifyBeforeEvent) before deadline (n==1)
+      if (a.time == b.time) {
+        if ((a.n == 0) != (b.n == 0)) {
+          return !(a.n == 0); // put n==0 ahead
+        }
+      }
       if (a.added_index != b.added_index) return a.added_index > b.added_index;
       return a.n > b.n; // ensure stable order for same time
     }
