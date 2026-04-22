@@ -95,7 +95,8 @@ class Memo {
     if (!e) return;
     if (auto nb = dynamic_cast<const NotifyBeforeEvent *>(e)) {
       int pre_time = e->GetDeadline() - nb->GetNotifyTime();
-      if (pre_time >= 1) {
+      // Only schedule pre-notification if its time is strictly in the future
+      if (pre_time >= 1 && pre_time > current_time_) {
         pq_.push(Node{pre_time, added_index, e, 0});
       }
       pq_.push(Node{e->GetDeadline(), added_index, e, 1});
